@@ -24,32 +24,6 @@
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.3);
         }
-
-        /* Custom colors for feedback, to be applied by JS */
-        .feedback-correct-bg {
-            background-color: #8fe9a1 !important; /* Greenish */
-            color: #1f2937 !important; /* Dark gray text for better contrast on light green */
-        }
-        .feedback-incorrect-bg {
-            background-color: #CA7A7B !important; /* Reddish */
-            color: #ffffff !important; /* White text for better contrast on light red */
-        }
-        .option-correct-selected {
-            background-color: #8fe9a1 !important;
-            border-color: #70c180 !important; /* Slightly darker border */
-            color: #1f2937 !important;
-        }
-        .option-incorrect-selected {
-            background-color: #CA7A7B !important;
-            border-color: #b86869 !important; /* Slightly darker border */
-            color: #ffffff !important;
-        }
-        .option-actually-correct { /* When user chose wrong, this highlights the correct one */
-            background-color: #8fe9a1 !important;
-            border-color: #70c180 !important;
-            color: #1f2937 !important;
-        }
-
     </style>
 </head>
 <body class="bg-gradient-to-br from-yellow-300 via-orange-400 via-pink-500 to-purple-600 min-h-screen flex flex-col items-center justify-center p-2 selection:bg-purple-500 selection:text-white">
@@ -506,6 +480,217 @@
                     correct: "Exactement. L'anneau de Gygès est une expérience de pensée pour tester si la justice est recherchée pour elle-même ou par crainte.",
                     incorrect: "Glaucon utilise cet argument pour défendre une vision plus pessimiste de la motivation humaine à être juste, suggérant qu'elle est souvent contrainte."
                 }
+            },
+            // Lot 4 (Questions 31-45) - Nouvelles questions
+            {
+                question: "Le \"problème difficile de la conscience\" (Chalmers) se réfère à l'énigme de :",
+                options: [
+                    "La manière dont le cerveau traite l'information sensorielle complexe.",
+                    "L'expérience subjective qualitative (qualia), le \"ce que cela fait\" d'être conscient.",
+                    "La capacité des IA à simuler des comportements intelligents.",
+                    "L'origine évolutive de la conscience chez les êtres vivants."
+                ],
+                answer: 1,
+                feedback: {
+                    correct: "Précisément. Chalmers distingue cela des problèmes 'faciles' liés aux fonctions cognitives.",
+                    incorrect: "Le problème 'difficile' concerne l'aspect subjectif et qualitatif de l'expérience, pas seulement le traitement fonctionnel de l'information."
+                }
+            },
+            {
+                question: "L'argument de Nagel sur la chauve-souris met en évidence que la compréhension objective des mécanismes neurophysiologiques :",
+                options: [
+                    "Est suffisante pour comprendre pleinement l'expérience subjective d'un être.",
+                    "Est impossible sans un langage commun avec l'espèce étudiée.",
+                    "Ne permet pas d'accéder au point de vue subjectif, à l'expérience vécue de cet être.",
+                    "Prouve que seuls les humains ont une réelle expérience subjective."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "C'est le point central de Nagel : la subjectivité échappe à une description purement objective.",
+                    incorrect: "Nagel souligne une limite fondamentale de l'objectivité scientifique face à l'expérience subjective, quelle que soit l'espèce."
+                }
+            },
+            {
+                question: "L'hypothèse de la \"grammaire universelle\" de Chomsky implique que l'acquisition du langage chez l'enfant est facilitée par :",
+                options: [
+                    "Un apprentissage intensif basé uniquement sur la répétition et l'imitation des adultes.",
+                    "Des structures linguistiques innées qui prédisposent le cerveau à organiser les données linguistiques.",
+                    "La simplicité inhérente à toutes les langues humaines, qui partagent un vocabulaire de base commun.",
+                    "L'exposition tardive au langage, une fois que les capacités cognitives sont pleinement développées."
+                ],
+                answer: 1,
+                feedback: {
+                    correct: "Exact. Ces structures innées expliqueraient la rapidité et la créativité de l'acquisition du langage.",
+                    incorrect: "Chomsky met l'accent sur une prédisposition biologique, une structure innée, et non sur un simple apprentissage par imitation."
+                }
+            },
+            {
+                question: "La conception de la technique chez Ortega y Gasset comme relevant d'une \"inclusion partielle\" de l'homme dans la Nature signifie que l'homme :",
+                options: [
+                    "Est un être purement naturel soumis passivement aux lois de la Nature.",
+                    "Peut se détacher complètement de la Nature grâce à la technique.",
+                    "Utilise sa compréhension des lois naturelles pour transformer la Nature selon ses projets, tout en restant dépendant d'elle.",
+                    "Doit viser une fusion totale avec la Nature, abandonnant toute artificialité."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "C'est bien cela. L'homme est dans la Nature mais la façonne activement, en utilisant ses propres ressources contre ses contraintes.",
+                    incorrect: "L'\"inclusion partielle\" signifie que l'homme est à la fois partie de la Nature et capable de la modifier activement, sans s'en extraire totalement ni s'y fondre passivement."
+                }
+            },
+            {
+                question: "La dialectique du maître et de l'esclave chez Hegel illustre que c'est par le travail (la transformation de la matière) que l'esclave :",
+                options: [
+                    "S'aliène davantage en perdant toute liberté.",
+                    "Prend conscience de sa propre puissance formatrice et s'humanise, tandis que le maître reste dépendant.",
+                    "Comprend la nécessité de se soumettre au maître pour survivre.",
+                    "Développe uniquement des compétences techniques sans transformation de sa conscience."
+                ],
+                answer: 1,
+                feedback: {
+                    correct: "Exact. Le travail est pour Hegel un processus d'objectivation et de reconnaissance de soi.",
+                    incorrect: "Hegel montre que le travail, bien que contraint, est formateur pour la conscience de l'esclave, qui acquiert une maîtrise sur le monde et sur soi."
+                }
+            },
+            {
+                question: "La notion heideggérienne du \"On\" (das Man) comme sphère initiale de l'existence signifie que l'individualité authentique (le \"Je\") :",
+                options: [
+                    "Est donnée d'emblée à la naissance, indépendamment du contexte social.",
+                    "Se constitue en se détachant et en se différenciant de l'anonymat des conventions sociales initiales.",
+                    "N'est possible qu'en rejetant totalement toute forme de vie sociale.",
+                    "Est une illusion, l'homme étant toujours entièrement déterminé par le \"On\"."
+                ],
+                answer: 1,
+                feedback: {
+                    correct: "C'est cela. Le \"Je\" émerge d'une prise de distance par rapport à la quotidienneté anonyme du \"On\".",
+                    incorrect: "Pour Heidegger, le \"On\" est la modalité première, et l'authenticité se gagne par une reprise de soi face à cet anonymat."
+                }
+            },
+            {
+                question: "La difficulté d'appliquer la formule de justice \"rendre à chacun ce qui lui est dû\" (Platon) est illustrée par le fait que :",
+                options: [
+                    "Il est impossible de déterminer ce qui appartient légalement à quelqu'un.",
+                    "Cette formule ignore complètement la notion de mérite individuel.",
+                    "Dans certaines situations, rendre ce qui est formellement \"dû\" pourrait avoir des conséquences néfastes ou injustes (ex: rendre une arme à un furieux).",
+                    "Seuls les philosophes-rois peuvent correctement interpréter ce qui est \"dû\"."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "Exactement. L'application mécanique de la règle peut entrer en conflit avec un jugement moral plus large sur le bien.",
+                    incorrect: "La critique porte sur le fait que la simple restitution formelle peut être contraire à la justice si les conséquences sont mauvaises."
+                }
+            },
+            {
+                question: "Les sciences humaines et sociales se distinguent des sciences naturelles par des défis méthodologiques spécifiques, notamment :",
+                options: [
+                    "L'impossibilité totale d'utiliser des méthodes quantitatives.",
+                    "L'absence de théories ou de modèles explicatifs.",
+                    "La subjectivité de l'observateur et de l'observé, et la question de la liberté humaine qui complique le déterminisme.",
+                    "Leur incapacité à produire des connaissances utiles pour la société."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "C'est un enjeu majeur : l'implication du chercheur et la nature complexe de l'objet humain rendent la méthode plus délicate.",
+                    incorrect: "Les sciences humaines font face à la complexité de la subjectivité, de l'interprétation et de la liberté, qui ne se prêtent pas aussi facilement aux méthodes des sciences naturelles."
+                }
+            },
+            {
+                question: "Le \"sophisme naturaliste\" consiste à croire qu'on peut déduire une norme morale (un \"devoir-être\") :",
+                options: [
+                    "Uniquement à partir de textes religieux sacrés.",
+                    "D'une analyse purement rationnelle des concepts moraux.",
+                    "D'une description de ce qui existe ou se passe dans la nature (un \"être\").",
+                    "D'un consensus social obtenu par la discussion démocratique."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "Précisément. C'est le passage illégitime du fait à la valeur, du descriptif au prescriptif.",
+                    incorrect: "Le sophisme naturaliste est l'erreur de croire que ce qui EST dans la nature nous dit ce qui DOIT être moralement."
+                }
+            },
+            {
+                question: "L'anecdote de Zeuxis peignant Hélène de Troie à partir de plusieurs modèles suggère que l'art, dans sa quête de beauté, peut viser à :",
+                options: [
+                    "Reproduire le plus fidèlement possible un individu unique existant.",
+                    "Exprimer une beauté purement abstraite, sans référence au monde sensible.",
+                    "Construire une forme idéale de beauté en combinant et transcendant les perfections partielles trouvées dans la nature.",
+                    "Démontrer la supériorité de la technique artistique sur la beauté naturelle."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "C'est l'idée : l'artiste crée un idéal qui dépasse les réalisations singulières de la nature.",
+                    incorrect: "Zeuxis ne copie pas un modèle unique, il compose une perfection idéale à partir de beautés éparses, suggérant une idéalisation."
+                }
+            },
+            {
+                question: "Critiquer le \"mythe de l'inspiration\" en art, c'est souligner l'importance :",
+                options: [
+                    "Du génie inné comme seule source de valeur artistique, rendant le travail superflu.",
+                    "De la chance et des rencontres fortuites dans la carrière d'un artiste.",
+                    "Du travail acharné, de la discipline, de l'expérimentation et de la maîtrise technique dans le processus de création.",
+                    "Des états de transe ou d'illumination mystique pour produire des œuvres majeures."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "Exact. Cette critique valorise l'effort conscient et la persévérance de l'artiste.",
+                    incorrect: "La critique du mythe de l'inspiration met en avant que la création artistique est aussi, et souvent surtout, un long travail."
+                }
+            },
+            {
+                question: "La notion d'\"évolution artificielle\" appliquée à l'homme (par l'éducation, par exemple) se caractérise par :",
+                options: [
+                    "Une transformation purement biologique et génétique.",
+                    "Un processus lent et non dirigé, similaire à l'évolution naturelle.",
+                    "Une intervention intentionnelle visant à modeler l'individu ou l'espèce selon des fins choisies.",
+                    "L'impossibilité de modifier les traits considérés comme \"naturels\"."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "C'est cela. L'homme se prend lui-même comme objet de transformation culturelle et technique.",
+                    incorrect: "L'évolution artificielle est marquée par l'intentionnalité et la directionnalité imposées par l'homme, contrairement à la sélection naturelle."
+                }
+            },
+            {
+                question: "Quand on dit que la justice est une \"construction artificielle\", cela signifie qu'elle :",
+                options: [
+                    "Est une illusion sans fondement réel dans les sociétés humaines.",
+                    "Vise à établir des normes (comme l'égalité des droits) qui ne sont pas spontanément données par la nature.",
+                    "Est uniquement le produit des rapports de force et sert les intérêts des plus puissants.",
+                    "Peut être entièrement déduite des lois observées dans le règne animal."
+                ],
+                answer: 1,
+                feedback: {
+                    correct: "Précisément. La justice comme idéal normatif est un effort humain pour dépasser ou corriger l'état de fait naturel.",
+                    incorrect: "La justice comme norme est une création humaine pour organiser la vie sociale, souvent en opposition ou en complément à ce que la nature offre."
+                }
+            },
+            {
+                question: "L'abduction, comme mode de raisonnement, est particulièrement utile en science pour :",
+                options: [
+                    "Garantir la certitude absolue d'une conclusion à partir de prémisses vraies.",
+                    "Généraliser une loi universelle à partir d'un grand nombre d'observations particulières.",
+                    "Formuler une hypothèse explicative plausible face à un ensemble de faits ou un phénomène surprenant.",
+                    "Appliquer une théorie existante pour prédire un résultat expérimental spécifique."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "Exact. C'est l'inférence à la meilleure explication, un moteur de la découverte scientifique.",
+                    incorrect: "L'abduction est le processus par lequel on propose une hypothèse pour expliquer des données ; elle n'est ni une généralisation (induction) ni une preuve certaine (déduction)."
+                }
+            },
+            {
+                question: "La distinction entre \"éthique personnelle\" et \"morale (au sens fort)\" suggère que la morale tend vers :",
+                options: [
+                    "Des règles subjectives et variables pour chaque individu.",
+                    "Des principes que l'on estime devoir s'appliquer universellement à tous les êtres humains.",
+                    "Uniquement des codes de déontologie professionnelle spécifiques à certains métiers.",
+                    "La simple description des mœurs et coutumes d'une société donnée."
+                ],
+                answer: 1,
+                feedback: {
+                    correct: "C'est bien cela. La morale (sens fort) a une prétention à l'universalité que n'a pas nécessairement l'éthique personnelle.",
+                    incorrect: "Alors que l'éthique personnelle concerne la quête d'une 'vie bonne' individuelle, la morale (sens fort) vise des obligations plus universelles."
+                }
             }
         ];
 
@@ -526,10 +711,10 @@
 
         const correctColorHex = '#8fe9a1';
         const incorrectColorHex = '#CA7A7B';
-        const correctBorderHex = '#70c180'; // Slightly darker for border
-        const incorrectBorderHex = '#b86869'; // Slightly darker for border
-        const textOnCorrectHex = '#1f2937'; // Dark gray text
-        const textOnIncorrectHex = '#ffffff'; // White text
+        const correctBorderHex = '#70c180'; 
+        const incorrectBorderHex = '#b86869'; 
+        const textOnCorrectHex = '#1f2937'; 
+        const textOnIncorrectHex = '#ffffff'; 
 
 
         function shuffleArray(array) {
@@ -540,11 +725,21 @@
         }
 
         function setupQuiz() {
-            shuffleArray(quizData);
-            questionsToPlay = [...quizData]; 
+            shuffleArray(quizData); // Mélange toute la banque de questions
+            // Sélectionne les 20 premières questions du tableau mélangé, ou moins si le total est inférieur à 20
+            questionsToPlay = quizData.slice(0, Math.min(20, quizData.length)); 
             currentQuestionIndex = 0;
             score = 0;
-            loadQuestion();
+            if (questionsToPlay.length > 0) {
+                 loadQuestion();
+            } else {
+                mainTitleElement.textContent = "Aucune question disponible.";
+                document.getElementById('question-area').style.display = 'none';
+                document.getElementById('navigation-area').style.display = 'none';
+                document.getElementById('feedback-area').style.display = 'none';
+                completionMessageElement.style.display = 'none';
+                scoreAreaElement.style.display = 'none';
+            }
         }
 
         function loadQuestion() {
@@ -557,7 +752,6 @@
                 currentQuestion.options.forEach((option, index) => {
                     const button = document.createElement('button');
                     button.textContent = option;
-                    // Base styling, colors will be overridden on selection/feedback
                     button.classList.add('w-full', 'text-left', 'p-2', 'rounded-md', 'transition-all', 'duration-200', 'ease-in-out', 'border-2', 'border-gray-700', 'hover:bg-gray-600', 'focus:outline-none', 'focus:ring-2', 'focus:ring-opacity-75', 'font-light', 'text-xs', 'text-white');
                     button.dataset.index = index;
                     button.addEventListener('click', () => selectOption(button, index));
@@ -565,17 +759,15 @@
                 });
 
                 feedbackTextElement.textContent = '';
-                feedbackTextElement.className = 'text-xs font-light text-center p-2 rounded-md min-h-[3em] flex items-center justify-center w-full'; // Ensure w-full for bg
-                feedbackTextElement.style.backgroundColor = ''; // Clear previous direct styles
-                feedbackTextElement.style.color = ''; // Clear previous direct styles
+                feedbackTextElement.className = 'text-xs font-light text-center p-2 rounded-md min-h-[3em] flex items-center justify-center w-full';
+                feedbackTextElement.style.backgroundColor = ''; 
+                feedbackTextElement.style.color = ''; 
                 
                 submitButton.style.display = 'block'; 
                 nextButton.style.display = 'none';
                 submitButton.disabled = true; 
                 
-                // Updated title to be smaller and only show counter
                 mainTitleElement.textContent = `(${currentQuestionIndex + 1}/${questionsToPlay.length})`;
-
 
             } else {
                 showCompletion();
@@ -584,14 +776,12 @@
 
         function selectOption(button, index) {
             if (selectedOptionButton) {
-                // Reset previously selected button to default (Tailwind classes)
                 selectedOptionButton.classList.remove('bg-pink-500', 'border-pink-400', 'ring-pink-300');
                 selectedOptionButton.classList.add('border-gray-700', 'hover:bg-gray-600', 'text-white');
-                selectedOptionButton.style.backgroundColor = ''; // Clear direct styles
+                selectedOptionButton.style.backgroundColor = ''; 
                 selectedOptionButton.style.borderColor = '';
                 selectedOptionButton.style.color = '';
             }
-            // Style new selected button (Tailwind pink for selection indication)
             button.classList.remove('border-gray-700', 'hover:bg-gray-600');
             button.classList.add('bg-pink-500', 'border-pink-400', 'ring-pink-300');
             selectedOptionButton = button;
@@ -607,9 +797,8 @@
 
             optionsButtons.forEach(btn => btn.disabled = true); 
 
-            // Clear selection highlight from the clicked button
             selectedOptionButton.classList.remove('bg-pink-500', 'border-pink-400', 'ring-pink-300');
-            selectedOptionButton.classList.add('border-gray-700'); // Revert to default border for now
+            selectedOptionButton.classList.add('border-gray-700'); 
 
 
             if (selectedAnswerIndex === currentQuestion.answer) {
@@ -630,7 +819,6 @@
                 selectedOptionButton.style.borderColor = incorrectBorderHex;
                 selectedOptionButton.style.color = textOnIncorrectHex;
 
-                // Highlight the actually correct answer
                 if (optionsButtons[currentQuestion.answer]) { 
                     optionsButtons[currentQuestion.answer].style.backgroundColor = correctColorHex;
                     optionsButtons[currentQuestion.answer].style.borderColor = correctBorderHex;
@@ -645,16 +833,14 @@
 
         function handleNext() {
             currentQuestionIndex++;
-            // Reset styles for all option buttons before loading next question
             const optionsButtons = Array.from(optionsContainerElement.querySelectorAll('button'));
             optionsButtons.forEach(btn => {
                 btn.style.backgroundColor = '';
                 btn.style.borderColor = '';
-                btn.style.color = ''; // Reset to default text color (white via Tailwind)
-                btn.disabled = false; // Re-enable for next question
-                // Ensure base Tailwind classes are reapplied if direct styles are cleared
+                btn.style.color = ''; 
+                btn.disabled = false; 
                 btn.classList.add('border-gray-700', 'hover:bg-gray-600', 'text-white');
-                btn.classList.remove('bg-pink-500', 'border-pink-400', 'ring-pink-300'); // Clear selection color
+                btn.classList.remove('bg-pink-500', 'border-pink-400', 'ring-pink-300'); 
             });
             loadQuestion();
         }
@@ -667,8 +853,8 @@
         function showCompletion() {
             document.getElementById('question-area').style.display = 'none';
             document.getElementById('navigation-area').style.display = 'none';
-            mainTitleElement.textContent = "Terminé !"; // Changed completion title
-            mainTitleElement.classList.remove('text-gray-400'); // Make it more prominent
+            mainTitleElement.textContent = "Terminé !"; 
+            mainTitleElement.classList.remove('text-gray-400'); 
             mainTitleElement.classList.add('text-lg', 'font-medium', 'text-white');
 
 
