@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Interactif de Philosophie</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-yellow-300 via-orange-400 via-pink-500 to-purple-600 min-h-screen flex flex-col items-center justify-center p-2 selection:bg-purple-500 selection:text-white">
+
+    <div id="quiz-container" class="bg-gray-800 text-white p-4 sm:p-5 rounded-lg shadow-xl w-full max-w-sm transition-all duration-500 ease-in-out">
+        <h1 id="main-title" class="text-lg sm:text-xl font-medium text-center mb-4">Quiz de Philosophie</h1>
+        
+        <div id="question-area" class="mb-3">
+            <p id="question-text" class="text-sm font-light mb-3 text-center min-h-[4em] flex items-center justify-center"></p>
+            <div id="options-container" class="space-y-1.5">
+                </div>
+        </div>
+
+        <div id="feedback-area" class="mt-2 mb-1.5 min-h-[3em] flex items-center justify-center">
+            <p id="feedback-text" class="text-xs font-light text-center p-2 rounded-md"></p>
+        </div>
+        
+        <div id="navigation-area" class="mt-3 flex flex-col sm:flex-row justify-center items-center space-y-1.5 sm:space-y-0 sm:space-x-2">
+            <button id="submit-button" class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white font-normal py-1.5 px-3 rounded-md text-xs transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-75">
+                Valider
+            </button>
+            <button id="next-button" class="w-full sm:w-auto bg-pink-500 hover:bg-pink-600 text-white font-normal py-1.5 px-3 rounded-md text-xs transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:ring-opacity-75" style="display: none;">
+                Suivant
+            </button>
+        </div>
+
+        <div id="score-area" class="mt-3 text-center text-xs" style="display: none;">
+            <p id="score-text" class="font-normal"></p>
+        </div>
+         <p id="completion-message" class="text-base font-medium text-center mt-5" style="display: none;"></p>
+    </div>
+
+    <script>
+        const quizData = [
+            // Lot 1 (Questions 1-5)
+            {
+                question: "La philosophie, en interrogeant la valeur des fins, se distingue des disciplines techniques principalement par :",
+                options: [
+                    "Son refus d'utiliser des moyens pour atteindre des objectifs.",
+                    "Sa capacité à fournir des solutions définitives aux problèmes existentiels.",
+                    "Son orientation vers la critique des buts plutôt que l'optimisation des moyens.",
+                    "Son désintérêt total pour les applications pratiques de la connaissance."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "Précisément. La philosophie examine la légitimité des fins que les techniques servent.",
+                    incorrect: "Attention, la philosophie ne rejette pas les moyens, mais elle questionne surtout la validité des fins visées."
+                }
+            },
+            {
+                question: "L'approche philosophique du \"crash-test d'idées\" implique principalement de :",
+                options: [
+                    "Confirmer la popularité d'une idée par sondage.",
+                    "Mettre une idée en tension avec d'autres pour évaluer sa robustesse logique et ses implications.",
+                    "Démontrer l'utilité immédiate d'une idée pour la société.",
+                    "Simplifier une idée complexe pour la rendre accessible à tous, quitte à en perdre la substance."
+                ],
+                answer: 1,
+                feedback: {
+                    correct: "Exactement. Il s'agit d'un examen critique de la cohérence et des conséquences d'une idée.",
+                    incorrect: "Le \"crash-test\" philosophique est plus exigeant qu'une simple vérification de popularité ou d'utilité immédiate ; il s'agit d'un test de résistance logique."
+                }
+            },
+            {
+                question: "La formule socratique \"Je sais que je ne sais rien\" est philosophiquement significative car elle :",
+                options: [
+                    "Exprime un défaitisme intellectuel face à la complexité du monde.",
+                    "Constitue une posture d'humilité nécessaire à l'ouverture et à la recherche de la vérité.",
+                    "Justifie l'abandon de toute tentative de connaissance rationnelle.",
+                    "Est une affirmation ironique visant à discréditer les savoirs établis sans proposer d'alternative."
+                ],
+                answer: 1,
+                feedback: {
+                    correct: "C'est bien cela. Elle marque la reconnaissance de son ignorance comme moteur de la quête philosophique.",
+                    incorrect: "Cette formule n'est pas un aveu de défaitisme, mais plutôt le point de départ d'une démarche constructive de questionnement."
+                }
+            },
+            {
+                question: "Développer son esprit critique en philosophie, selon le sens originel de \"krinein\", signifie avant tout :",
+                options: [
+                    "Adopter une attitude systématiquement négative envers toute affirmation.",
+                    "Mémoriser les critiques des grands philosophes pour les reproduire.",
+                    "Apprendre à séparer, discerner et évaluer avec une distance réflexive ses propres pensées et celles d'autrui.",
+                    "Se conformer aux jugements émis par une autorité intellectuelle reconnue."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "Parfait. L'esprit critique est cette capacité de discernement et de jugement autonome.",
+                    incorrect: "L'esprit critique philosophique va au-delà de la simple négation ou de la répétition ; il s'agit d'une évaluation active et distanciée."
+                }
+            },
+            {
+                question: "L'\"ingénierie conceptuelle\" en philosophie vise à :",
+                options: [
+                    "Créer un langage philosophique hermétique réservé aux initiés.",
+                    "Affiner ou inventer des concepts pour améliorer notre \"carte mentale\" et notre interaction avec la réalité.",
+                    "Démontrer la supériorité de la philosophie sur les sciences empiriques.",
+                    "Standardiser la pensée en imposant des définitions uniques pour chaque concept."
+                ],
+                answer: 1,
+                feedback: {
+                    correct: "Tout à fait. Il s'agit d'un travail sur les concepts pour mieux appréhender le réel.",
+                    incorrect: "L'objectif n'est pas l'hermétisme ni l'imposition, mais l'amélioration de notre outillage conceptuel pour la compréhension."
+                }
+            },
+            // Lot 2 (Questions 6-15)
+            {
+                question: "La distinction entre conscience immédiate et conscience réfléchie est cruciale. Laquelle est la plus souvent invoquée pour marquer une spécificité humaine et pourquoi ?",
+                options: [
+                    "La conscience immédiate, car elle prouve une réceptivité supérieure au monde.",
+                    "La conscience réfléchie, car elle implique la capacité de se prendre soi-même comme objet de pensée.",
+                    "Aucune, car le stade du miroir montre une équivalence chez certains animaux.",
+                    "La conscience corporelle, car elle fonde l'action intentionnelle spécifiquement humaine."
+                ],
+                answer: 1,
+                feedback: {
+                    correct: "Exact. La conscience réfléchie, ou conscience de soi, est souvent vue comme un marqueur de la complexité de la pensée humaine.",
+                    incorrect: "Bien que la conscience immédiate soit fondamentale, c'est la capacité de réflexion sur soi qui est généralement mise en avant pour distinguer la conscience humaine."
+                }
+            },
+            {
+                question: "Selon Nietzsche, la conscience du temps chez l'homme, par opposition à l'animal \"attaché au piquet de l'instant\", a pour conséquence principale :",
+                options: [
+                    "Une plus grande efficacité dans la satisfaction des besoins primaires.",
+                    "L'émergence du regret, des remords et de l'angoisse face à la finitude.",
+                    "Une capacité supérieure à vivre pleinement et sereinement le présent.",
+                    "L'élimination de l'oubli, rendant l'homme incapable d'adaptation."
+                ],
+                answer: 1,
+                feedback: {
+                    correct: "C'est une interprétation nietzschéenne clé. La conscience temporelle ouvre à des affects spécifiques liés au passé et au futur.",
+                    incorrect: "Nietzsche souligne plutôt le fardeau que représente cette conscience du temps, contrastant avec l'insouciance animale."
+                }
+            },
+            {
+                question: "La critique cartésienne du langage animal repose sur l'idée que les animaux, même s'ils communiquent, n'expriment pas véritablement de \"pensées\" au sens où :",
+                options: [
+                    "Leur vocabulaire est trop limité pour former des phrases complexes.",
+                    "Leurs signaux sont des réponses directes à des passions ou besoins, et non le véhicule d'idées abstraites ou désintéressées.",
+                    "Ils sont incapables d'apprendre des signes arbitraires comme les mots.",
+                    "Leur communication n'a aucune fonction sociale au sein de leur espèce."
+                ],
+                answer: 1,
+                feedback: {
+                    correct: "Précisément. Pour Descartes, parler c'est exprimer des pensées qui transcendent les affects immédiats.",
+                    incorrect: "La critique de Descartes ne porte pas tant sur la complexité grammaticale que sur la nature de ce qui est exprimé : passion ou pensée."
+                }
+            },
+            {
+                question: "L'essence de la technique, selon le cours, ne réside pas seulement dans l'outil, mais dans :",
+                options: [
+                    "La complexité croissante des objets fabriqués.",
+                    "La recherche de l'efficacité par un processus déterminé, qu'il soit hi-tech, low-tech ou no-tech.",
+                    "La satisfaction exclusive des besoins humains fondamentaux.",
+                    "L'abandon de toute intervention sur la nature."
+                ],
+                answer: 1,
+                feedback: {
+                    correct: "Exactement. La technique est avant tout une rationalisation des moyens en vue d'une fin, indépendamment de la matérialité de l'outil.",
+                    incorrect: "L'essence de la technique est plus large que la simple complexité ou la satisfaction des besoins ; elle concerne la méthode et l'efficacité."
+                }
+            },
+            {
+                question: "La critique marxiste de l'aliénation humaine dans le travail capitaliste souligne que le travailleur est dépossédé :",
+                options: [
+                    "Uniquement de la plus-value économique qu'il produit.",
+                    "De son temps libre, mais pas de son humanité au travail.",
+                    "De la reconnaissance sociale, mais il conserve le sens de son activité.",
+                    "De la richesse produite ET de son humanité, son activité devenant une contrainte extérieure où il ne se reconnaît plus."
+                ],
+                answer: 3,
+                feedback: {
+                    correct: "C'est la double dimension de l'aliénation selon Marx : économique et humaine.",
+                    incorrect: "Marx insiste sur une aliénation plus profonde que la simple perte économique ; elle touche à l'essence même de l'activité humaine."
+                }
+            },
+            {
+                question: "Pour Hobbes, la sortie de l'état de nature et l'institution de l'État (Léviathan) sont motivées par la nécessité de :",
+                options: [
+                    "Maximiser la liberté individuelle absolue de chaque citoyen.",
+                    "Établir une égalité économique parfaite entre tous les membres de la société.",
+                    "Garantir la sécurité et la paix civile en transférant le pouvoir à une autorité souveraine forte.",
+                    "Promouvoir l'épanouissement moral des individus par des lois vertueuses."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "C'est le fondement de la théorie hobbesienne : la sécurité prime pour échapper à la \"guerre de tous contre tous\".",
+                    incorrect: "Chez Hobbes, la liberté individuelle est sacrifiée au profit de la sécurité garantie par un pouvoir absolu, et non pour l'égalité économique ou l'épanouissement moral au sens rousseauiste par exemple."
+                }
+            },
+            {
+                question: "La distinction entre le \"légal\" et le \"légitime\" en matière de justice implique que :",
+                options: [
+                    "Toute loi légalement adoptée est nécessairement juste et légitime.",
+                    "La légitimité d'une règle dépend uniquement de son ancienneté et de la tradition.",
+                    "Une loi peut être conforme aux procédures (légale) tout en étant perçue comme injuste (illégitime), ouvrant la voie à la contestation.",
+                    "Le sentiment populaire est le seul critère pour déterminer ce qui est légal."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "Exactement. Cette tension est fondamentale et peut justifier la désobéissance civile face à des lois jugées illégitimes.",
+                    incorrect: "Le légal concerne la conformité à la loi écrite, tandis que le légitime fait appel à un sens plus profond de la justice, qui peut diverger."
+                }
+            },
+            {
+                question: "Le \"problème de l'induction\" souligné par David Hume remet en question la certitude des sciences empiriques en montrant que :",
+                options: [
+                    "Les observations scientifiques sont toujours subjectives et donc peu fiables.",
+                    "Les déductions logiques à partir d'axiomes sont impossibles dans les sciences de la nature.",
+                    "Une généralisation à partir d'un nombre fini d'observations (passées/présentes) n'est jamais logiquement garantie pour tous les cas futurs.",
+                    "Les théories scientifiques ne peuvent jamais être réfutées par de nouvelles expériences."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "C'est le cœur du problème : l'induction ne fournit pas de certitude logique absolue, seulement une probabilité.",
+                    incorrect: "Le problème de l'induction ne nie pas la possibilité d'observer ou de réfuter, mais la certitude des lois universelles inférées de cas particuliers."
+                }
+            },
+            {
+                question: "Dans le débat sur le mensonge, la position de Kant (ne jamais mentir) s'oppose à celle de Benjamin Constant qui introduit la notion de :",
+                options: [
+                    "\"Mensonge nécessaire\" pour préserver l'ordre social à tout prix.",
+                    "\"Droit à la vérité\", conditionnant le devoir de vérité à la légitimité de l'interlocuteur à la recevoir.",
+                    "\"Vérité subjective\", où chaque individu définit ce qui est vrai pour lui.",
+                    "\"Mensonge créatif\", qui serait une forme d'art."
+                ],
+                answer: 1,
+                feedback: {
+                    correct: "C'est la distinction clé apportée par Constant : le devoir de vérité n'est pas absolu et inconditionnel.",
+                    incorrect: "Constant ne défend pas un relativisme total de la vérité, mais conditionne le devoir de la dire au droit de l'autre à l'entendre, notamment en fonction de ses intentions."
+                }
+            },
+            {
+                question: "L'eudémonisme aristotélicien considère le bonheur (eudaimonia) comme le souverain bien car :",
+                options: [
+                    "Il est le plus facile à atteindre par la satisfaction des plaisirs immédiats.",
+                    "Il est une fin recherchée pour elle-même, et non comme moyen pour une autre fin.",
+                    "Il est garanti par la possession de richesses matérielles.",
+                    "Il consiste en une absence totale de souffrance et d'effort."
+                ],
+                answer: 1,
+                feedback: {
+                    correct: "Exact. Pour Aristote, le bonheur est la fin ultime, l'activité de l'âme conforme à la vertu.",
+                    incorrect: "L'eudaimonia aristotélicienne est plus exigeante que la simple recherche de plaisir ou l'absence de souffrance ; c'est un accomplissement vertueux."
+                }
+            },
+            // Lot 3 (Questions 16-30) - Nouvelles questions
+            {
+                question: "Selon Durkheim, le \"fait social\" se caractérise principalement par son extériorité à l'individu et :",
+                options: [
+                    "Sa nature purement psychologique et subjective.",
+                    "Le fait qu'il résulte d'un choix individuel conscient.",
+                    "Sa capacité à exercer une contrainte sur l'individu.",
+                    "Son absence totale d'influence sur les comportements."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "Précisément. Pour Durkheim, le fait social est extérieur et contraignant pour l'individu.",
+                    incorrect: "Le fait social, selon Durkheim, n'est pas un simple choix individuel mais une force collective qui s'impose."
+                }
+            },
+            {
+                question: "La conception aristotélicienne de l'homme comme \"animal politique\" (zoon politikon) signifie que :",
+                options: [
+                    "L'homme est naturellement égoïste et ne recherche que son intérêt personnel en société.",
+                    "La société est une construction artificielle pour limiter la violence naturelle de l'homme.",
+                    "L'homme n'accomplit pleinement sa nature et n'atteint le bien vivre qu'au sein de la cité (polis).",
+                    "La politique est une activité réservée à une élite d'individus supérieurs."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "C'est l'idée centrale d'Aristote : la vie en cité est naturelle et nécessaire à l'épanouissement humain.",
+                    incorrect: "Pour Aristote, la sociabilité est naturelle à l'homme et la cité est le lieu de son accomplissement, non une simple contrainte."
+                }
+            },
+            {
+                question: "Dans la théorie du contrat social de Rousseau, la \"volonté générale\" se distingue de la \"volonté de tous\" en ce qu'elle :",
+                options: [
+                    "Est la simple somme des intérêts égoïstes de chaque citoyen.",
+                    "Vise l'intérêt commun lorsque les citoyens délibèrent en faisant abstraction de leurs intérêts particuliers.",
+                    "Est déterminée par un souverain éclairé qui impose sa vision du bien commun.",
+                    "N'est qu'une fiction théorique sans aucune possibilité de réalisation pratique."
+                ],
+                answer: 1,
+                feedback: {
+                    correct: "Exact. La volonté générale tend vers l'intérêt commun, tandis que la volonté de tous peut n'être qu'une agrégation d'intérêts privés.",
+                    incorrect: "Rousseau opère une distinction cruciale : la volonté générale n'est pas la somme des volontés particulières mais ce qui vise le bien public."
+                }
+            },
+            {
+                question: "La critique du \"droit du plus fort\" par Rousseau repose sur l'argument que :",
+                options: [
+                    "La force physique est toujours le fondement légitime du pouvoir politique.",
+                    "On peut être forcé de céder à la puissance, mais on n'est moralement obligé d'obéir qu'à un pouvoir légitime.",
+                    "Le plus fort a naturellement le droit de commander aux plus faibles.",
+                    "La justice sociale consiste à institutionnaliser les rapports de force existants."
+                ],
+                answer: 1,
+                feedback: {
+                    correct: "C'est un point clé de la critique rousseauiste : la force ne crée pas le droit ni l'obligation morale.",
+                    incorrect: "Rousseau montre que la force relève de la nécessité ou de la prudence, mais pas de l'obligation morale qui suppose la légitimité."
+                }
+            },
+            {
+                question: "L'innovation majeure de la science grecque antique, illustrée par le théorème de Pythagore, par rapport aux savoirs pratiques antérieurs (égyptiens par ex.), est :",
+                options: [
+                    "L'utilisation d'instruments de mesure plus précis.",
+                    "La découverte de nouvelles propriétés géométriques inconnues.",
+                    "L'introduction de la démonstration rationnelle pour fonder les connaissances (le \"pourquoi\").",
+                    "L'application systématique des mathématiques à l'architecture monumentale."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "C'est exact. La recherche du \"pourquoi\" et la méthode démonstrative sont des apports fondamentaux des Grecs.",
+                    incorrect: "Si les Grecs ont fait des découvertes, leur innovation principale réside dans la méthode de la démonstration rationnelle."
+                }
+            },
+            {
+                question: "Le statut exceptionnel des mathématiques dans l'histoire des sciences tient notamment au fait qu'elles :",
+                options: [
+                    "Sont la seule science capable de décrire parfaitement la réalité physique.",
+                    "Permettent de découvrir des vérités nécessaires et universelles par la seule réflexion, sans observation empirique directe.",
+                    "Sont totalement dépendantes des avancées technologiques pour leur progression.",
+                    "Ont prouvé que toutes les lois de la nature peuvent être réduites à des équations simples."
+                ],
+                answer: 1,
+                feedback: {
+                    correct: "C'est une caractéristique distinctive des mathématiques : leur capacité à atteindre des certitudes par la déduction pure.",
+                    incorrect: "Les mathématiques traitent d'objets abstraits et leurs vérités sont logiques, pas nécessairement une description directe du monde physique empirique."
+                }
+            },
+            {
+                question: "Parmi les modes de raisonnement scientifique, lequel est considéré comme le plus fiable pour atteindre des conclusions certaines, mais \"presque stérile\" pour découvrir de nouvelles lois de la nature ?",
+                options: [
+                    "L'induction, car elle généralise à partir de multiples observations.",
+                    "L'abduction, car elle propose la meilleure explication à un phénomène.",
+                    "La déduction, car si les prémisses sont vraies et le raisonnement valide, la conclusion est nécessairement vraie.",
+                    "L'analogie, car elle établit des correspondances entre différents domaines."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "C'est la déduction. Elle garantit la validité logique mais ne génère pas de nouvelles connaissances empiriques par elle-même.",
+                    incorrect: "Pensez au mode de raisonnement qui part de règles générales pour aboutir à des conclusions spécifiques avec certitude logique."
+                }
+            },
+             {
+                question: "La critique de Montaigne concernant l'universalité des règles morales s'appuie principalement sur :",
+                options: [
+                    "La révélation divine comme source unique de la morale.",
+                    "L'existence d'une nature humaine immuable dictant des lois morales universelles.",
+                    "La grande diversité des mœurs et des coutumes à travers les cultures et les époques.",
+                    "La capacité de la raison à établir des principes moraux absolus par la logique."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "Exactement. Montaigne utilise la diversité culturelle pour questionner l'idée de règles morales universellement admises.",
+                    incorrect: "Montaigne est connu pour son scepticisme nourri par l'observation de la variété des pratiques humaines, ce qui l'amène à douter d'une morale naturelle unique."
+                }
+            },
+            {
+                question: "Une différence fondamentale entre une morale déontologique (type Kant) et une morale conséquentialiste (type utilitarisme) réside dans :",
+                options: [
+                    "Le fait que la morale déontologique ignore totalement les intentions de l'agent.",
+                    "L'importance accordée aux conséquences de l'action pour en déterminer la valeur morale.",
+                    "Le refus par le conséquentialisme de toute règle ou principe général.",
+                    "La certitude pour la déontologie que le bonheur est la seule fin morale."
+                ],
+                answer: 1,
+                feedback: {
+                    correct: "C'est un point central : le conséquentialisme juge par les résultats, la déontologie par la conformité au devoir, indépendamment des conséquences directes.",
+                    incorrect: "La distinction majeure porte sur ce qui fonde le jugement moral : l'acte en lui-même (devoir) ou ses résultats (conséquences)."
+                }
+            },
+            {
+                question: "Dans le jugement esthétique, la tension analysée par Kant entre la subjectivité du plaisir ressenti et l'exigence d'universalité signifie que :",
+                options: [
+                    "La beauté est une propriété objective de l'objet, démontrable scientifiquement.",
+                    "Chacun a raison de trouver beau ce qui lui plaît, et toute discussion est vaine.",
+                    "Lorsque nous jugeons un objet beau, nous parlons comme si la beauté était objective et attendons l'assentiment d'autrui, sans pouvoir le prouver.",
+                    "L'universalité du jugement de goût repose sur des canons de beauté établis par les experts."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "C'est le paradoxe du jugement de goût selon Kant : il est subjectif dans son origine mais prétend à l'universalité.",
+                    incorrect: "Kant souligne que le jugement de goût n'est pas basé sur des concepts prouvables (comme en science) ni sur de purs canons, mais sur un sentiment qui exige l'accord d'autrui."
+                }
+            },
+            {
+                question: "La distinction kantienne entre \"talent\" et \"génie\" en art suggère que le génie se caractérise principalement par :",
+                options: [
+                    "Une habileté technique supérieure acquise par un travail acharné.",
+                    "La capacité à imiter parfaitement les œuvres des maîtres du passé.",
+                    "Une disposition innée à inventer des formes et des règles originales qui servent de modèles.",
+                    "La popularité et le succès commercial de ses œuvres auprès du grand public."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "C'est cela. Le génie est originalité et capacité à donner de nouvelles règles à l'art, selon Kant.",
+                    incorrect: "Le talent peut s'acquérir et imiter, mais le génie, pour Kant, est une force créatrice innée qui innove."
+                }
+            },
+            {
+                question: "L'analyse de Walter Benjamin sur la perte de l'\"aura\" de l'œuvre d'art à l'époque de sa reproductibilité technique signifie que :",
+                options: [
+                    "Les reproductions techniques améliorent la qualité esthétique des œuvres originales.",
+                    "L'œuvre d'art perd son caractère unique, son \"ici et maintenant\" lié à l'original, lorsqu'elle est massivement reproduite.",
+                    "Seules les œuvres d'art non reproductibles techniquement peuvent être considérées comme authentiques.",
+                    "La reproduction technique rend l'art accessible à tous, augmentant ainsi son aura et sa valeur cultuelle."
+                ],
+                answer: 1,
+                feedback: {
+                    correct: "Exact. L'aura est liée à l'unicité et à l'authenticité de l'original, que la reproduction technique tend à dissoudre.",
+                    incorrect: "Benjamin soutient que la reproductibilité technique altère l'aura, la valeur cultuelle liée à l'original, même si elle démocratise l'accès."
+                }
+            },
+            {
+                question: "La thèse de \"l'art pour l'art\" défend l'idée que la valeur d'une œuvre d'art réside principalement dans :",
+                options: [
+                    "Son utilité sociale, morale ou politique.",
+                    "Sa capacité à générer des profits économiques importants.",
+                    "Sa perfection formelle ou sa puissance expressive intrinsèque, indépendamment de toute finalité extérieure.",
+                    "Son respect scrupuleux des canons académiques et des traditions."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "C'est le principe de l'autonomie de l'art : sa fin est en lui-même.",
+                    incorrect: "L'art pour l'art rejette justement la subordination de l'œuvre à des fins utilitaires, morales ou autres."
+                }
+            },
+            {
+                question: "La perspective sociologique ou institutionnelle de l'art (Bourdieu, Danto) met en lumière que la reconnaissance d'un objet comme \"œuvre d'art\" dépend fortement :",
+                options: [
+                    "Uniquement des qualités esthétiques intrinsèques et universelles de l'objet.",
+                    "Du jugement infaillible d'une élite d'artistes géniaux.",
+                    "Des processus de légitimation culturelle, du discours des institutions et du \"monde de l'art\".",
+                    "De la rareté et du coût élevé de l'objet sur le marché de l'art."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "C'est un apport majeur de cette perspective : l'art est aussi une construction sociale et institutionnelle.",
+                    incorrect: "Ces théories soulignent que le statut d'œuvre d'art n'est pas seulement une question de propriétés intrinsèques, mais aussi de reconnaissance par un champ social."
+                }
+            },
+             {
+                question: "L'argument de l'\"anneau de Gygès\" utilisé par Glaucon dans La République de Platon vise à soutenir que :",
+                options: [
+                    "Les hommes sont naturellement justes et le resteraient même s'ils pouvaient agir impunément.",
+                    "La justice est une vertu innée qui se manifeste indépendamment des conséquences.",
+                    "Les hommes ne pratiquent la justice que par contrainte, par peur des sanctions et par incapacité à commettre l'injustice sans risque.",
+                    "L'invisibilité conférée par l'anneau permettrait de mieux discerner les véritables intentions des autres."
+                ],
+                answer: 2,
+                feedback: {
+                    correct: "Exactement. L'anneau de Gygès est une expérience de pensée pour tester si la justice est recherchée pour elle-même ou par crainte.",
+                    incorrect: "Glaucon utilise cet argument pour défendre une vision plus pessimiste de la motivation humaine à être juste, suggérant qu'elle est souvent contrainte."
+                }
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedOptionButton = null;
+        let questionsToPlay = []; 
+
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainerElement = document.getElementById('options-container');
+        const feedbackTextElement = document.getElementById('feedback-text');
+        const submitButton = document.getElementById('submit-button');
+        const nextButton = document.getElementById('next-button');
+        const scoreTextElement = document.getElementById('score-text');
+        const scoreAreaElement = document.getElementById('score-area');
+        const mainTitleElement = document.getElementById('main-title');
+        const completionMessageElement = document.getElementById('completion-message');
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function setupQuiz() {
+            shuffleArray(quizData);
+            questionsToPlay = [...quizData]; 
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentQuestionIndex < questionsToPlay.length) {
+                const currentQuestion = questionsToPlay[currentQuestionIndex];
+                questionTextElement.textContent = currentQuestion.question;
+                optionsContainerElement.innerHTML = ''; 
+                selectedOptionButton = null; 
+
+                currentQuestion.options.forEach((option, index) => {
+                    const button = document.createElement('button');
+                    button.textContent = option;
+                    button.classList.add('w-full', 'text-left', 'p-2', 'rounded-md', 'transition-all', 'duration-200', 'ease-in-out', 'border-2', 'border-gray-700', 'hover:bg-gray-600', 'focus:outline-none', 'focus:ring-2', 'focus:ring-opacity-75', 'font-light', 'text-xs');
+                    button.dataset.index = index;
+                    button.addEventListener('click', () => selectOption(button, index));
+                    optionsContainerElement.appendChild(button);
+                });
+
+                feedbackTextElement.textContent = '';
+                // Reset feedback class, new colors will be added in handleSubmit
+                feedbackTextElement.className = 'text-xs font-light text-center p-2 rounded-md min-h-[3em] flex items-center justify-center text-white'; // Ensure text is white by default
+                submitButton.style.display = 'block'; 
+                nextButton.style.display = 'none';
+                submitButton.disabled = true; 
+                
+                mainTitleElement.textContent = `Quiz (${currentQuestionIndex + 1}/${questionsToPlay.length})`;
+
+            } else {
+                showCompletion();
+            }
+        }
+
+        function selectOption(button, index) {
+            if (selectedOptionButton) {
+                selectedOptionButton.classList.remove('bg-pink-500', 'border-pink-400', 'ring-pink-300'); // Adjusted selected color
+                selectedOptionButton.classList.add('border-gray-700', 'hover:bg-gray-600');
+            }
+            button.classList.remove('border-gray-700', 'hover:bg-gray-600');
+            button.classList.add('bg-pink-500', 'border-pink-400', 'ring-pink-300'); 
+            selectedOptionButton = button;
+            submitButton.disabled = false; 
+        }
+
+        function handleSubmit() {
+            if (selectedOptionButton === null) return; 
+
+            const selectedAnswerIndex = parseInt(selectedOptionButton.dataset.index);
+            const currentQuestion = questionsToPlay[currentQuestionIndex];
+            const optionsButtons = optionsContainerElement.querySelectorAll('button');
+
+            optionsButtons.forEach(btn => btn.disabled = true); 
+
+            // Remove previous color classes before adding new ones
+            feedbackTextElement.classList.remove('bg-emerald-700', 'bg-rose-700');
+            selectedOptionButton.classList.remove('bg-pink-500', 'border-pink-400', 'ring-pink-300'); // Remove selection highlight
+            
+            // Default to gray border for unselected options
+            optionsButtons.forEach(btn => {
+                btn.classList.remove('bg-emerald-600', 'border-emerald-500', 'ring-emerald-400');
+                btn.classList.remove('bg-rose-600', 'border-rose-500', 'ring-rose-400');
+                if(btn !== selectedOptionButton) { // Keep gray border for non-selected, non-correct options
+                     btn.classList.add('border-gray-700');
+                }
+            });
+
+
+            if (selectedAnswerIndex === currentQuestion.answer) {
+                score++;
+                feedbackTextElement.textContent = currentQuestion.feedback.correct;
+                feedbackTextElement.classList.add('bg-emerald-800'); // Muted green background for feedback text
+                selectedOptionButton.classList.add('bg-emerald-600', 'border-emerald-500', 'ring-emerald-400'); 
+            } else {
+                feedbackTextElement.textContent = currentQuestion.feedback.incorrect;
+                feedbackTextElement.classList.add('bg-rose-800'); // Muted red background for feedback text
+                selectedOptionButton.classList.add('bg-rose-600', 'border-rose-500', 'ring-rose-400'); 
+                if (optionsButtons[currentQuestion.answer]) { 
+                    optionsButtons[currentQuestion.answer].classList.remove('border-gray-700'); // Remove gray border if it's the correct one
+                    optionsButtons[currentQuestion.answer].classList.add('bg-emerald-600', 'border-emerald-500', 'ring-emerald-400');
+                }
+            }
+            
+            submitButton.style.display = 'none';
+            nextButton.style.display = 'block'; 
+            updateScoreDisplay();
+        }
+
+        function handleNext() {
+            currentQuestionIndex++;
+            loadQuestion();
+        }
+        
+        function updateScoreDisplay() {
+            scoreAreaElement.style.display = 'block';
+            scoreTextElement.textContent = `Score: ${score} / ${questionsToPlay.length}`;
+        }
+
+        function showCompletion() {
+            document.getElementById('question-area').style.display = 'none';
+            document.getElementById('navigation-area').style.display = 'none';
+            mainTitleElement.textContent = "Quiz Terminé !";
+            completionMessageElement.textContent = `Félicitations ! Votre score final est de ${score} sur ${questionsToPlay.length}.`;
+            completionMessageElement.style.display = 'block';
+            scoreAreaElement.style.display = 'none'; 
+        }
+
+        submitButton.addEventListener('click', handleSubmit);
+        nextButton.addEventListener('click', handleNext);
+
+        setupQuiz(); 
+    </script>
+
+</body>
+</html>
