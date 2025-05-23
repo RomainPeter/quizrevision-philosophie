@@ -24,12 +24,38 @@
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.3);
         }
+
+        /* Custom colors for feedback, to be applied by JS */
+        .feedback-correct-bg {
+            background-color: #8fe9a1 !important; /* Greenish */
+            color: #1f2937 !important; /* Dark gray text for better contrast on light green */
+        }
+        .feedback-incorrect-bg {
+            background-color: #CA7A7B !important; /* Reddish */
+            color: #ffffff !important; /* White text for better contrast on light red */
+        }
+        .option-correct-selected {
+            background-color: #8fe9a1 !important;
+            border-color: #70c180 !important; /* Slightly darker border */
+            color: #1f2937 !important;
+        }
+        .option-incorrect-selected {
+            background-color: #CA7A7B !important;
+            border-color: #b86869 !important; /* Slightly darker border */
+            color: #ffffff !important;
+        }
+        .option-actually-correct { /* When user chose wrong, this highlights the correct one */
+            background-color: #8fe9a1 !important;
+            border-color: #70c180 !important;
+            color: #1f2937 !important;
+        }
+
     </style>
 </head>
 <body class="bg-gradient-to-br from-yellow-300 via-orange-400 via-pink-500 to-purple-600 min-h-screen flex flex-col items-center justify-center p-2 selection:bg-purple-500 selection:text-white">
 
     <div id="quiz-container" class="bg-gray-800 text-white p-4 sm:p-5 rounded-lg shadow-xl w-full max-w-sm transition-all duration-500 ease-in-out">
-        <h1 id="main-title" class="text-lg sm:text-xl font-medium text-center mb-4">Quiz de Philosophie</h1>
+        <h1 id="main-title" class="text-xs font-light text-center text-gray-400 mb-4"></h1>
         
         <div id="question-area" class="mb-3">
             <p id="question-text" class="text-sm font-light mb-3 text-center min-h-[4em] flex items-center justify-center"></p>
@@ -38,7 +64,7 @@
         </div>
 
         <div id="feedback-area" class="mt-2 mb-1.5 min-h-[3em] flex items-center justify-center">
-            <p id="feedback-text" class="text-xs font-light text-center p-2 rounded-md"></p>
+            <p id="feedback-text" class="text-xs font-light text-center p-2 rounded-md w-full"></p>
         </div>
         
         <div id="navigation-area" class="mt-3 flex flex-col sm:flex-row justify-center items-center space-y-1.5 sm:space-y-0 sm:space-x-2">
@@ -270,7 +296,7 @@
                     incorrect: "L'eudaimonia aristotélicienne est plus exigeante que la simple recherche de plaisir ou l'absence de souffrance ; c'est un accomplissement vertueux."
                 }
             },
-            // Lot 3 (Questions 16-30) - Nouvelles questions
+            // Lot 3 (Questions 16-30)
             {
                 question: "Selon Durkheim, le \"fait social\" se caractérise principalement par son extériorité à l'individu et :",
                 options: [
@@ -498,6 +524,14 @@
         const mainTitleElement = document.getElementById('main-title');
         const completionMessageElement = document.getElementById('completion-message');
 
+        const correctColorHex = '#8fe9a1';
+        const incorrectColorHex = '#CA7A7B';
+        const correctBorderHex = '#70c180'; // Slightly darker for border
+        const incorrectBorderHex = '#b86869'; // Slightly darker for border
+        const textOnCorrectHex = '#1f2937'; // Dark gray text
+        const textOnIncorrectHex = '#ffffff'; // White text
+
+
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -523,20 +557,25 @@
                 currentQuestion.options.forEach((option, index) => {
                     const button = document.createElement('button');
                     button.textContent = option;
-                    button.classList.add('w-full', 'text-left', 'p-2', 'rounded-md', 'transition-all', 'duration-200', 'ease-in-out', 'border-2', 'border-gray-700', 'hover:bg-gray-600', 'focus:outline-none', 'focus:ring-2', 'focus:ring-opacity-75', 'font-light', 'text-xs');
+                    // Base styling, colors will be overridden on selection/feedback
+                    button.classList.add('w-full', 'text-left', 'p-2', 'rounded-md', 'transition-all', 'duration-200', 'ease-in-out', 'border-2', 'border-gray-700', 'hover:bg-gray-600', 'focus:outline-none', 'focus:ring-2', 'focus:ring-opacity-75', 'font-light', 'text-xs', 'text-white');
                     button.dataset.index = index;
                     button.addEventListener('click', () => selectOption(button, index));
                     optionsContainerElement.appendChild(button);
                 });
 
                 feedbackTextElement.textContent = '';
-                // Reset feedback class, new colors will be added in handleSubmit
-                feedbackTextElement.className = 'text-xs font-light text-center p-2 rounded-md min-h-[3em] flex items-center justify-center text-white'; // Ensure text is white by default
+                feedbackTextElement.className = 'text-xs font-light text-center p-2 rounded-md min-h-[3em] flex items-center justify-center w-full'; // Ensure w-full for bg
+                feedbackTextElement.style.backgroundColor = ''; // Clear previous direct styles
+                feedbackTextElement.style.color = ''; // Clear previous direct styles
+                
                 submitButton.style.display = 'block'; 
                 nextButton.style.display = 'none';
                 submitButton.disabled = true; 
                 
-                mainTitleElement.textContent = `Quiz (${currentQuestionIndex + 1}/${questionsToPlay.length})`;
+                // Updated title to be smaller and only show counter
+                mainTitleElement.textContent = `(${currentQuestionIndex + 1}/${questionsToPlay.length})`;
+
 
             } else {
                 showCompletion();
@@ -545,11 +584,16 @@
 
         function selectOption(button, index) {
             if (selectedOptionButton) {
-                selectedOptionButton.classList.remove('bg-pink-500', 'border-pink-400', 'ring-pink-300'); // Adjusted selected color
-                selectedOptionButton.classList.add('border-gray-700', 'hover:bg-gray-600');
+                // Reset previously selected button to default (Tailwind classes)
+                selectedOptionButton.classList.remove('bg-pink-500', 'border-pink-400', 'ring-pink-300');
+                selectedOptionButton.classList.add('border-gray-700', 'hover:bg-gray-600', 'text-white');
+                selectedOptionButton.style.backgroundColor = ''; // Clear direct styles
+                selectedOptionButton.style.borderColor = '';
+                selectedOptionButton.style.color = '';
             }
+            // Style new selected button (Tailwind pink for selection indication)
             button.classList.remove('border-gray-700', 'hover:bg-gray-600');
-            button.classList.add('bg-pink-500', 'border-pink-400', 'ring-pink-300'); 
+            button.classList.add('bg-pink-500', 'border-pink-400', 'ring-pink-300');
             selectedOptionButton = button;
             submitButton.disabled = false; 
         }
@@ -559,36 +603,38 @@
 
             const selectedAnswerIndex = parseInt(selectedOptionButton.dataset.index);
             const currentQuestion = questionsToPlay[currentQuestionIndex];
-            const optionsButtons = optionsContainerElement.querySelectorAll('button');
+            const optionsButtons = Array.from(optionsContainerElement.querySelectorAll('button'));
 
             optionsButtons.forEach(btn => btn.disabled = true); 
 
-            // Remove previous color classes before adding new ones
-            feedbackTextElement.classList.remove('bg-emerald-700', 'bg-rose-700');
-            selectedOptionButton.classList.remove('bg-pink-500', 'border-pink-400', 'ring-pink-300'); // Remove selection highlight
-            
-            // Default to gray border for unselected options
-            optionsButtons.forEach(btn => {
-                btn.classList.remove('bg-emerald-600', 'border-emerald-500', 'ring-emerald-400');
-                btn.classList.remove('bg-rose-600', 'border-rose-500', 'ring-rose-400');
-                if(btn !== selectedOptionButton) { // Keep gray border for non-selected, non-correct options
-                     btn.classList.add('border-gray-700');
-                }
-            });
+            // Clear selection highlight from the clicked button
+            selectedOptionButton.classList.remove('bg-pink-500', 'border-pink-400', 'ring-pink-300');
+            selectedOptionButton.classList.add('border-gray-700'); // Revert to default border for now
 
 
             if (selectedAnswerIndex === currentQuestion.answer) {
                 score++;
                 feedbackTextElement.textContent = currentQuestion.feedback.correct;
-                feedbackTextElement.classList.add('bg-emerald-800'); // Muted green background for feedback text
-                selectedOptionButton.classList.add('bg-emerald-600', 'border-emerald-500', 'ring-emerald-400'); 
+                feedbackTextElement.style.backgroundColor = correctColorHex;
+                feedbackTextElement.style.color = textOnCorrectHex;
+
+                selectedOptionButton.style.backgroundColor = correctColorHex;
+                selectedOptionButton.style.borderColor = correctBorderHex;
+                selectedOptionButton.style.color = textOnCorrectHex;
             } else {
                 feedbackTextElement.textContent = currentQuestion.feedback.incorrect;
-                feedbackTextElement.classList.add('bg-rose-800'); // Muted red background for feedback text
-                selectedOptionButton.classList.add('bg-rose-600', 'border-rose-500', 'ring-rose-400'); 
+                feedbackTextElement.style.backgroundColor = incorrectColorHex;
+                feedbackTextElement.style.color = textOnIncorrectHex;
+                
+                selectedOptionButton.style.backgroundColor = incorrectColorHex;
+                selectedOptionButton.style.borderColor = incorrectBorderHex;
+                selectedOptionButton.style.color = textOnIncorrectHex;
+
+                // Highlight the actually correct answer
                 if (optionsButtons[currentQuestion.answer]) { 
-                    optionsButtons[currentQuestion.answer].classList.remove('border-gray-700'); // Remove gray border if it's the correct one
-                    optionsButtons[currentQuestion.answer].classList.add('bg-emerald-600', 'border-emerald-500', 'ring-emerald-400');
+                    optionsButtons[currentQuestion.answer].style.backgroundColor = correctColorHex;
+                    optionsButtons[currentQuestion.answer].style.borderColor = correctBorderHex;
+                    optionsButtons[currentQuestion.answer].style.color = textOnCorrectHex;
                 }
             }
             
@@ -599,6 +645,17 @@
 
         function handleNext() {
             currentQuestionIndex++;
+            // Reset styles for all option buttons before loading next question
+            const optionsButtons = Array.from(optionsContainerElement.querySelectorAll('button'));
+            optionsButtons.forEach(btn => {
+                btn.style.backgroundColor = '';
+                btn.style.borderColor = '';
+                btn.style.color = ''; // Reset to default text color (white via Tailwind)
+                btn.disabled = false; // Re-enable for next question
+                // Ensure base Tailwind classes are reapplied if direct styles are cleared
+                btn.classList.add('border-gray-700', 'hover:bg-gray-600', 'text-white');
+                btn.classList.remove('bg-pink-500', 'border-pink-400', 'ring-pink-300'); // Clear selection color
+            });
             loadQuestion();
         }
         
@@ -610,7 +667,11 @@
         function showCompletion() {
             document.getElementById('question-area').style.display = 'none';
             document.getElementById('navigation-area').style.display = 'none';
-            mainTitleElement.textContent = "Quiz Terminé !";
+            mainTitleElement.textContent = "Terminé !"; // Changed completion title
+            mainTitleElement.classList.remove('text-gray-400'); // Make it more prominent
+            mainTitleElement.classList.add('text-lg', 'font-medium', 'text-white');
+
+
             completionMessageElement.textContent = `Félicitations ! Votre score final est de ${score} sur ${questionsToPlay.length}.`;
             completionMessageElement.style.display = 'block';
             scoreAreaElement.style.display = 'none'; 
